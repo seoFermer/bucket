@@ -32,8 +32,8 @@
                         <h5 class="card-title">Basket</h5>
                         <p>Total: $ {{ $order ? $order->totalCosts() : 0 }}</p>
                         <p>Discount: $ {{ $order ? $order->discount() : 0 }}</p>
-                        <p>Total Discounted Price: $ {{ $order ? $order->totalDiscountedPrice() : 0 }}</p>
-                        <p class="card-text">Delivery costs: $ {{ $order ? $order->delivery_costs : 0 }}</p>
+                        <p><b>Total Discounted Price: $ {{ $order ? $order->totalDiscountedPrice() : 0 }}</b></p>
+                        <p class="card-text"><b>Delivery costs: $ {{ $order ? $order->delivery_costs : 0 }}</b></p>
                     </div>
                 </div>
             </div>

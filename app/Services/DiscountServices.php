@@ -13,21 +13,19 @@ class DiscountServices
 
     public function getDiscountByProduct($cart)
     {
-        $m = 0;
-           if($cart->product->code == 'R01'){
-               $quantity = $cart->quantity;
-               $quantity2 = $quantity % 2;
-               if($quantity2 != 0) {
-                   $quantity = $quantity -1;
-               }
-               $quantity = intdiv($quantity,2);
-               $m = $quantity * $cart->price * 0.50;
-               $m = round($m, 2);
-           };
+        $discount = 0;
+        if ($cart->product->code == 'R01') {
+            $quantityProduct = $cart->quantity;
+            $isQuantityEvent = $quantityProduct % 2;
+            if ($isQuantityEvent != 0) {
+                $quantityProduct = $quantityProduct - 1;
+            }
+            $quantityProductDiscount = intdiv($quantityProduct, 2);
+            $discount = $quantityProductDiscount * $cart->price * 0.50;
+            $discount = round($discount, 2);
+        };
 
-
-       return $m;
-
+        return $discount;
     }
 
 }
