@@ -19,8 +19,8 @@ class CreateCartsTable extends Migration
             $table->integer('product_id');
             $table->integer('quantity');
             $table->float('price');
-            $table->float('discount');
-            $table->integer('total');
+            $table->float('discount')->default(0);
+            $table->float('total')->default(0);;
             $table->timestamps();
         });
     }

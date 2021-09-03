@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('delivery_costs');
+            $table->float('delivery_costs');
             $table->string('status');
             $table->timestamps();
         });

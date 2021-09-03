@@ -16,12 +16,17 @@ class Order extends Model
 
     public function cart()
     {
-       return $this->hasMany(Cart::class);
+        return $this->hasMany(Cart::class);
     }
 
     public function totalCosts()
     {
         return $this->cart->sum('total');
+    }
+
+    public function totalDiscountedPrice()
+    {
+        return $this->cart->sum('total') - $this->discount();
     }
 
     public function discount()

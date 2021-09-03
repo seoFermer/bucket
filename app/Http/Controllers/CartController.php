@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Services\DeliveryServices;
 use Illuminate\Http\Request;
 use App\Http\Requests\CartRequest;
 use App\Services\CartServices;
@@ -12,11 +13,14 @@ class CartController extends Controller
 {
     private CartServices $cartService;
     private OrderServices $orderServices;
+    private DeliveryServices $deliveryServices;
 
-    public function __construct(CartServices $cartService, OrderServices $orderServices)
+
+    public function __construct(CartServices $cartService, OrderServices $orderServices, DeliveryServices $deliveryServices)
     {
         $this->cartService = $cartService;
         $this->orderServices = $orderServices;
+        $this->deliveryServices = $deliveryServices;
     }
 
     /**
@@ -26,17 +30,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $order = $this->orderServices->getOrder();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('cart.index', compact('order'));
     }
 
     /**
@@ -51,52 +47,10 @@ class CartController extends Controller
 
         $order = $this->orderServices->getOrder();
         $this->cartService->store($validatedData, $order);
+        $this->deliveryServices->getDeliveryCosts($order);
 
         return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Cart $cart)
-    {
-        //
-    }
 }

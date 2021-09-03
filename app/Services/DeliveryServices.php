@@ -15,7 +15,11 @@ class DeliveryServices
         if ($totalCosts > 50) $deliveryCosts = 2.95;
         if ($totalCosts > 90) $deliveryCosts = 0;
 
-        return $deliveryCosts;
+        $order->update([
+            'delivery_costs' => $deliveryCosts,
+        ]);
+
+        return true;
     }
 
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Services\DeliveryServices;
+use App\Services\DiscountServices;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Models\Product;
@@ -14,11 +15,13 @@ use App\Models\Product;
 class CartServices
 {
     private DeliveryServices $deliveryServices;
+    private DiscountServices $discountServices;
 
-    public function __construct(Cart $cart, DeliveryServices $deliveryServices)
+    public function __construct(Cart $cart, DeliveryServices $deliveryServices, DiscountServices $discountServices)
     {
         $this->model = $cart;
         $this->deliveryServices = $deliveryServices;
+        $this->discountServices = $discountServices;
     }
 
     public function store($data, $order)
@@ -28,7 +31,6 @@ class CartServices
             $product = Product::where('code', $data['code'])->first();
 
             $total = $data['quantity'] * $product->price;
-            $discount = 0;
 
             $cartAdded = $this->model
                 ->where('product_id', $product->id)
@@ -42,7 +44,6 @@ class CartServices
                         'product_id' => $product->id,
                         'quantity' => $data['quantity'],
                         'price' => $product->price,
-                        'discount' => $discount,
                         'total' => $total,
                 ]);
             } else {
@@ -55,12 +56,12 @@ class CartServices
                 ]);
             }
 
-            $deliveryCosts = $this->deliveryServices->getDeliveryCosts($order);
-
-            $order->update([
-                'delivery_costs' => $deliveryCosts,
-            ]);
-
+            foreach ($order->cart AS $cart) {
+                $discount = $this->discountServices->getDiscountByProduct($cart);
+                $cart->update([
+                    'discount' => $discount
+                ]);
+            }
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -71,19 +72,5 @@ class CartServices
         return true;
     }
 
-
-    public function getTotalCosts()
-    {
-        $total = 0;
-
-        return $total;
-    }
-
-    public function getDeliveryCosts()
-    {
-        $costs = 0;
-
-        return $costs;
-    }
 
 }

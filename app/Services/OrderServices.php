@@ -20,12 +20,13 @@ class OrderServices
     {
         DB::beginTransaction();
         try {
-            $order = Order::where('status', '0');
+
+            $order =  $this->model->first();
 
             if (empty($order)) {
                 $order = $this->model::create(
                     [
-                        'delivery_cost' => 0,
+                        'delivery_costs' => 0,
                         'status' => '0',
                     ]);
             }
